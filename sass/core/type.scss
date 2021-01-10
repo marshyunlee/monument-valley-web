@@ -1,0 +1,172 @@
+// type.scss
+
+$color-light: rgba(240,240,240,0.9);
+$color-dark: rgba(30,30,20,0.95);
+$color-accent: rgba(67,203,187,0.9); // #43cbbb
+$color-accent-alt: rgba(180,109,99,0.9); // #b46d63
+
+@function em($target, $context: 16) {
+	@return ($target / $context) * 1em;
+}
+
+body
+{
+	font-size: 100%;
+}
+
+a, a:visited {
+	color: $color-light;
+	text-decoration: none;
+}
+
+h3
+{
+	text-align: center;
+	font-family: 'Lato', sans-serif;
+	$size: 12;
+	font-size: em($size);
+	font-weight: 300;
+	line-height: em($size * 6);
+	letter-spacing: em($size / 4);
+	text-transform: uppercase;
+	color: $color-light;
+}
+
+label {
+	font-family: 'Roboto Slab', serif;
+	font-size: 1em;
+	letter-spacing: 3px;
+	text-align: center;
+	text-transform: uppercase;
+	color: $color-light;
+}
+
+input[type=text], select {
+	font-family: 'Lato', sans-serif;
+	font-size: 1em;
+	letter-spacing: 1px;
+	text-align: center;
+	text-transform: uppercase;
+	color: $color-light;
+}
+
+input[type=submit], input[type=button] {
+	font-family: 'lato', serif;
+	font-size: 0.75em;
+	font-weight: 400;
+	letter-spacing: 2px;
+	text-align: center;
+	text-transform: uppercase;
+	color: $color-light;
+}
+
+#effects-wrapper
+{
+	h1
+	{
+		font-family: 'Lato', sans-serif;
+		font-size: 8em;
+		font-weight: 300;
+		letter-spacing: 0.125em;
+		text-transform: uppercase;
+		color: $color-light;
+	}
+}
+
+.button, .button:visited {
+	font-family: 'Lato', sans-serif;
+	$size: 14;
+	font-size: em($size);
+	font-weight: 400;
+	letter-spacing: em($size / 4);
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#content-wrapper, #text-no-webgl
+{
+	color: $color-light;
+	h1,h2,span.pre-title, span.legal
+	{
+		margin: 0 auto;
+		font-family: 'Roboto Slab', serif;
+		text-transform: uppercase;
+	}
+	span.sub-intro, p {
+		font-family: 'Lato', sans-serif;
+		font-weight: 300;
+	}
+	h1 {
+		$size: 28;
+		font-size: em($size);
+		font-weight: 400;
+		line-height: em($size * 1);
+		letter-spacing: em($size / 7);
+	}
+	h2 {
+		$size: 16;
+		font-size: em($size);
+		font-weight: 300;
+		line-height: em($size * 2);
+		letter-spacing: em($size / 4);
+		max-width: em($size * 15);
+	}
+	span.pre-title, a.button, a.button:visited {
+		$size: 14;
+		font-size: em($size);
+		font-weight: 300;
+		letter-spacing: em($size / 4);
+	}
+	span.pre-title {
+		$size: 14;
+		line-height: em($size * 2);
+	}
+	span.sub-intro {
+		$size: 10;
+		font-size: em($size);
+		font-weight: 400;
+		line-height: em($size * 5);
+		letter-spacing: em($size / 5);
+		text-transform: uppercase;
+	}
+	a.button
+	{
+		font-family: 'Lato', sans-serif;
+		font-weight: 400;
+		margin: 16px auto;
+		width: 6em;
+		height: 6em;
+		line-height: 6em;
+		display: block;
+		border-radius: 50%;
+		border: 2px solid $color-light;
+		transition: background 1s;
+	}
+	a.button:hover {
+		background: $color-accent;
+	}
+	p {
+		margin-bottom: 1em;
+		$size: 16;
+		font-size: em($size);
+		font-weight: 300;
+		line-height: em($size * 1.5);
+		letter-spacing: em($size / $size);
+		word-spacing: em($size * 0.125);
+		a, a:visited {
+			//text-decoration: underline;
+			font-weight: 400;
+			transition: color 1s;
+		}
+		a:hover {
+			color: $color-accent;
+		}
+	}
+	span.legal {
+		$size: 10;
+		font-size: em($size);
+		font-weight: 300;
+		line-height: em($size * 5);
+		letter-spacing: em($size / 2.5);
+	}
+}
