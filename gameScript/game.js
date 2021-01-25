@@ -36,6 +36,7 @@ const initGame = () => {
 
 	// env
 	scene = new THREE.Scene();
+
 	renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(width, height);
@@ -43,8 +44,8 @@ const initGame = () => {
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-	const axesHelper = new THREE.AxesHelper(1000);
-	scene.add(axesHelper);
+	// const axesHelper = new THREE.AxesHelper(1000);
+	// scene.add(axesHelper);
 
 	// camera
 	camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearView, farView)
