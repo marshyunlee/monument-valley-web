@@ -49,7 +49,7 @@ var loadListener = () => {
 
 var applyGravity = () => {
 	gravityRay.set(character.position, new THREE.Vector3(0, 0, -1));
-	scene.add(new THREE.ArrowHelper(gravityRay.ray.direction, gravityRay.ray.origin, 300, 0xff0000) );
+	// scene.add(new THREE.ArrowHelper(gravityRay.ray.direction, gravityRay.ray.origin, 300, 0xff0000) );
 	const standingPlatforms = gravityRay.intersectObjects(scene.children);
 	if (standingPlatforms.length > 0) {
 		let firstEncounter = standingPlatforms[0];
