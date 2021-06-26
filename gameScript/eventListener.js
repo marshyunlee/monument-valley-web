@@ -24,6 +24,7 @@ var loadListener = () => {
 		floorplan = data.floorplan;
 		initGame();
 		character = loadCharacter(scene);
+		console.log(character)
 		
 		animate();
 	});
@@ -39,8 +40,8 @@ var loadListener = () => {
 		// cursor action
 		applyMovement();
 		let curr = getMapLocation(character.position);
-		console.log(curr);
-		console.log(data.floorplan[curr.z][curr.x][curr.y]);
+		// console.log(curr);
+		// console.log(data.floorplan[curr.z][curr.x][curr.y]);
 
 		// render
 		renderer.render(scene, camera);

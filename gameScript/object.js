@@ -15,7 +15,8 @@ var loadCharacter = (scene) => {
 		materials.preload();
 		objLoader.setMaterials(materials);
 		objLoader.load('character.obj', (object) => {
-			object.position.set(0, 0, -59);
+			console.log(startingPosition);
+			object.position.set(startingPosition);
 			object.rotation.set(0, Math.PI/2, Math.PI/2);
 			object.scale.set(0.2, 0.2, 0.2);
 
