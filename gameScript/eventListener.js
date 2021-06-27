@@ -2,6 +2,13 @@ const mouse = new THREE.Vector2();
 const mousePointer = new THREE.Raycaster();
 const gravityRay= new THREE.Raycaster();
 const GRAVITY = 1.0;
+const MOVEMENT = 2.0;
+
+const INTRO = new THREE.Vector3(10, 11, 2);
+// const ... = new THREE.Vector3();
+// const ... = new THREE.Vector3();
+const PORTFOLIO = new THREE.Vector3(10, 11, 8);
+const CONTACT = new THREE.Vector3(10, 6, 11);
 
 let character;
 let MOUSE_POINTED;
@@ -10,6 +17,8 @@ let CHARACTER_LOCATED;
 var stop = false;
 var frameCount = 0;
 var fpsInterval, startTime, now, then, elapsed;
+
+var isMoving = false;
 
 // ========== RESIZE ==========
 var resizeListener = () => {
@@ -48,6 +57,8 @@ var loadListener = async () => {
 			// gravity action
 			applyGravity();
 			// cursor action
+			watchCursor();
+			// character behaviour 
 			applyMovement();
 			
 			// render
@@ -58,29 +69,68 @@ var loadListener = async () => {
 }
 
 var applyGravity = () => {
-	// console.log(character.position);
-	gravityRay.set(character.position, new THREE.Vector3(0, 0, -1));
-	scene.add(new THREE.ArrowHelper(gravityRay.ray.direction, gravityRay.ray.origin, 300, 0xff0000, 0, 0));
-	const standingPlatforms = gravityRay.intersectObjects(scene.children);
-	if (standingPlatforms.length > 0) {
-		let firstEncounter = standingPlatforms[0];
-		if (firstEncounter.distance > 0) {
-			character.position.set(character.position.x, character.position.y, character.position.z - GRAVITY);
-		} else if (firstEncounter.distance < 0) {
-			character.position.set(character.position.x, character.position.y, character.position.z + GRAVITY);
+	if (!isMoving) {
+		gravityRay.set(character.position, new THREE.Vector3(0, 0, -1));
+		// gravitty visualization for debugging
+		// scene.add(new THREE.ArrowHelper(gravityRay.ray.direction, gravityRay.ray.origin, 300, 0xff0000, 0, 0));
+		const standingPlatforms = gravityRay.intersectObjects(scene.children);
+		if (standingPlatforms.length > 0) {
+			let firstEncounter = standingPlatforms[0];
+			if (firstEncounter.distance > 0) {
+				character.position.set(character.position.x, character.position.y, character.position.z - GRAVITY);
+			} else if (firstEncounter.distance < 0) {
+				character.position.set(character.position.x, character.position.y, character.position.z + GRAVITY);
+			}
+		}
+	}
+}
+
+var watchCursor = () => {
+	if (!isMoving) {
+		mousePointer.setFromCamera(mouse, camera);
+		const intersects = mousePointer.intersectObjects(scene.children);
+		if (intersects.length > 0) {
+			if (MOUSE_POINTED !== intersects[0].object && intersects[0].object.type === TYPE_PLATFORM) {
+				MOUSE_POINTED = intersects[0].object;
+			}
+		} else {
+			MOUSE_POINTED = undefined;
 		}
 	}
 }
 
 var applyMovement = () => {
-	mousePointer.setFromCamera(mouse, camera);
-	const intersects = mousePointer.intersectObjects(scene.children);
-	if (intersects.length > 0) {
-		if (MOUSE_POINTED !== intersects[0].object && intersects[0].object.type === TYPE_PLATFORM) {
-			MOUSE_POINTED = intersects[0].object;
+	if (isMoving) {
+		validatePath();
+		if (character.position.x > MOUSE_POINTED.position.x) {
+			character.rotation.set(Math.PI/2, -Math.PI/2, 0);
+			character.position.set(character.position.x - MOVEMENT, character.position.y, character.position.z);
+		} else if (character.position.x < MOUSE_POINTED.position.x) {
+			character.rotation.set(0, Math.PI/2, Math.PI/2);
+			character.position.set(character.position.x + MOVEMENT, character.position.y, character.position.z);
+		} else if (character.position.y > MOUSE_POINTED.position.y) {
+			character.rotation.set(Math.PI/2, 0, 0);
+			character.position.set(character.position.x, character.position.y - MOVEMENT, character.position.z);
+		} else if (character.position.y < MOUSE_POINTED.position.y) {
+			character.rotation.set(-Math.PI/2, 0, Math.PI);
+			character.position.set(character.position.x, character.position.y + MOVEMENT, character.position.z);
+		} else {
+			isMoving = false;
 		}
-	} else {
-		MOUSE_POINTED = undefined;
+	}
+}
+
+var validatePath = () => {
+	let curr = getMapLocation(character.position);
+	console.log(curr);
+}
+
+
+var getMapLocation = (vectorLocation) => {
+	return {
+		z: Math.ceil(Math.abs(vectorLocation.z/20 - 11)),
+		x: Math.ceil(vectorLocation.x/20 + 6),
+		y: Math.ceil(vectorLocation.y/20 + 6)
 	}
 }
 
@@ -97,22 +147,15 @@ var mouseListener = () => {
 }
 
 var onClick = (event) => {
-	let curr = getMapLocation(character.position);
-	console.log(curr);
+	// current location of the character (block-based) for debugging
+	// let curr = getMapLocation(character.position);
+	// console.log(curr);
 	
+	// reset the destination upon click
+	isMoving = false;
+	watchCursor();
 	event.preventDefault();
 	if (MOUSE_POINTED) {
-		character.position.set(MOUSE_POINTED.position.x, MOUSE_POINTED.position.y, MOUSE_POINTED.position.z + blockSize/2 + 10);
+		isMoving = true;
 	}
 }
-
-var getMapLocation = (vectorLocation) => {
-	return {
-		z: Math.ceil(Math.abs(vectorLocation.z/20 - 11)),
-		x: Math.ceil(vectorLocation.x/20 + 6),
-		y: Math.ceil(vectorLocation.y/20 + 6)
-	}
-}
-
-
-

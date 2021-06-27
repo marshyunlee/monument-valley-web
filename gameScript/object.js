@@ -12,9 +12,9 @@ var loadCharacter = async (scene) => {
 		materials.preload();
 		objLoader.setMaterials(materials);
 		objLoader.load('character.obj', (object) => {
-			console.log(startingPosition);
-			object.position.set(0, 0, 0);
+			object.position.set(0, 0 - (6 * blockSize), 0 + (1 * blockSize));
 			object.rotation.set(0, Math.PI/2, Math.PI/2);
+			// object.scale.set(1, 1, 1);
 			object.scale.set(0.2, 0.2, 0.2);
 
 			scene.add(object);
