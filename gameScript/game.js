@@ -29,7 +29,7 @@ const CELL_STAIRS = 3;
 const CELL_LIGHT = 4;
 const CELL_PILLAR = 5;
 
-const initGame = () => {
+const initGame = async () => {
 	// grid setup
 	grid = floorplan[0][0].length;
 	monumentSquareSize = blockSize * grid;
@@ -75,6 +75,7 @@ const initGame = () => {
 	floorplanRenderer();
 	resizeListener();
 	mouseListener();
+	await Promise.resolve();
 }
 
 const floorplanRenderer = () => {
@@ -103,7 +104,8 @@ const floorplanRenderer = () => {
 				yPos -= blockSize;
 				switch (cell) {
 					case CELL_BLOCK:
-						if (z === startingX && y === Math.ceil(floorplan[0].length/2)) {
+						if (z === startingX) {
+							console.log("?!?!?!?!?!?!");
 							startingPosition = new THREE.Vector3(xPos, yPos, zPos);
 						}
 						shape = new Cube(

@@ -17,16 +17,14 @@ var resizeListener = () => {
 }
 
 // ========== ON LOAD ==========
-var loadListener = () => {
-	window.addEventListener('load', () => {
+var loadListener = async () => {
+	window.addEventListener('load', async () => {
 		settings = data.settings;
 		document.body.style.background = `rgb(${settings.background})`;
 		floorplan = data.floorplan;
-		initGame();
-		character = loadCharacter(scene);
-		console.log(character)
-		
-		animate();
+		await initGame()
+		.then(await loadCharacter(scene))
+		.then(animate());
 	});
 
 	const animate = () => {
@@ -39,10 +37,7 @@ var loadListener = () => {
 
 		// cursor action
 		applyMovement();
-		let curr = getMapLocation(character.position);
-		// console.log(curr);
-		// console.log(data.floorplan[curr.z][curr.x][curr.y]);
-
+		
 		// render
 		renderer.render(scene, camera);
 	}
@@ -50,7 +45,7 @@ var loadListener = () => {
 
 var applyGravity = () => {
 	gravityRay.set(character.position, new THREE.Vector3(0, 0, -1));
-	// scene.add(new THREE.ArrowHelper(gravityRay.ray.direction, gravityRay.ray.origin, 300, 0xff0000) );
+	scene.add(new THREE.ArrowHelper(gravityRay.ray.direction, gravityRay.ray.origin, 300, 0xff0000, 0, 0));
 	const standingPlatforms = gravityRay.intersectObjects(scene.children);
 	if (standingPlatforms.length > 0) {
 		let firstEncounter = standingPlatforms[0];
@@ -87,6 +82,9 @@ var mouseListener = () => {
 }
 
 var onClick = (event) => {
+	let curr = getMapLocation(character.position);
+	console.log(curr);
+	
 	event.preventDefault();
 	if (MOUSE_POINTED) {
 		character.position.set(MOUSE_POINTED.position.x, MOUSE_POINTED.position.y, MOUSE_POINTED.position.z + blockSize/2 + 10);
