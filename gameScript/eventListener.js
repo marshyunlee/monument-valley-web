@@ -4,6 +4,8 @@ const mousePointer = new THREE.Raycaster();
 const gravityRay= new THREE.Raycaster();
 const GRAVITY = 1.0;
 const MOVEMENT = 2.0;
+// actual coordinates of floorplan[0][0][0]
+let defaultMapGeometry = new THREE.Vector3(0, 0, 0);
 
 // =====Event Triggers======
 const INTRO = new THREE.Vector3(10, 11, 2);
@@ -29,6 +31,7 @@ var frameCount = 0;
 var fpsInterval, startTime, now, then, elapsed;
 
 var isMoving = false;
+var path = [new THREE.Vector3()];
 
 // ========== RESIZE ==========
 var resizeListener = () => {
@@ -56,6 +59,12 @@ var loadListener = async () => {
 			})
 		);
 	});
+
+	defaultMapGeometry = new THREE.Vector3(
+		0 - (Math.ceil(data.floorplan[0][0].length / 2) * blockSize),
+		0 - (Math.ceil(data.floorplan[0].length / 2) * blockSize),
+		0 + (Math.ceil(data.floorplan.length / 2) * blockSize)
+	);
 
 	const animate = () => {
 		requestAnimationFrame(animate);
@@ -111,6 +120,17 @@ var watchCursor = () => {
 
 var applyMovement = () => {
 	if (isMoving) {
+		let curr = getMapLocation(character.position);
+		let dest = getMapLocation(MOUSE_POINTED.position);
+		if (path.length === 0 || curr === dest) {
+			isMoving = false;
+			path = [];
+		} else {
+			character.position.set(MOUSE_POINTED.position.x, MOUSE_POINTED.position.y, MOUSE_POINTED.position.z + Math.ceil(blockSize / 2));
+		}
+		isMoving = false;
+
+
 		if (findDirection() === XM) {
 			character.rotation.set(Math.PI/2, -Math.PI/2, 0);
 			character.position.set(character.position.x - MOVEMENT, character.position.y, character.position.z);
@@ -123,42 +143,40 @@ var applyMovement = () => {
 		} else if (findDirection() === YP) {
 			character.rotation.set(-Math.PI/2, 0, Math.PI);
 			character.position.set(character.position.x, character.position.y + MOVEMENT, character.position.z);
-		} else {
-			isMoving = false;
 		}
 	}
 }
 
+// scan the path, and udpate the path variable
 var findDirection = () => {
-	let curr = getMapLocation(character.position);
-	// console.log(curr);
-	console.log(character.position);
-	let Xplus = curr.x + 1 > data.floorplan[curr.z].length - 1 ? 0 : data.floorplan[curr.z][curr.x + 1][curr.y];
-	let Xminus = curr.x - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x - 1][curr.y];
-	let Yplus = curr.y + 1 > data.floorplan[curr.z][curr.x].length - 1 ? 0 : data.floorplan[curr.z][curr.x][curr.y + 1];
-	let Yminus = curr.y - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x][curr.y - 1];
+	let currLoc = getMapLocation(character.position);
+	let position = getActualPosition(currLoc);
+	// let Xplus = curr.x + 1 > data.floorplan[curr.z].length - 1 ? 0 : data.floorplan[curr.z][curr.x + 1][curr.y];
+	// let Xminus = curr.x - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x - 1][curr.y];
+	// let Yplus = curr.y + 1 > data.floorplan[curr.z][curr.x].length - 1 ? 0 : data.floorplan[curr.z][curr.x][curr.y + 1];
+	// let Yminus = curr.y - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x][curr.y - 1];
 
-	if (Xminus === 1) {
-		if (character.position.x > MOUSE_POINTED.position.x) {
-			return XM;
-		}
-	}
-	if (Xplus === 1) {
-		if (character.position.x < MOUSE_POINTED.position.x) {
-			return XP;
-		}
-	}
-	if (Yminus === 1) {
-		if (character.position.y > MOUSE_POINTED.position.y) {
-			return YM;
-		}
-	}
-	if (Yplus === 1) {
-		if (character.position.y < MOUSE_POINTED.position.y) {
-			return YP;
-		}
-	}
-	return UA;
+	// if (Xminus === 1) {
+	// 	if (character.position.x > MOUSE_POINTED.position.x) {
+	// 		return XM;
+	// 	}
+	// }
+	// if (Xplus === 1) {
+	// 	if (character.position.x < MOUSE_POINTED.position.x) {
+	// 		return XP;
+	// 	}
+	// }
+	// if (Yminus === 1) {
+	// 	if (character.position.y > MOUSE_POINTED.position.y) {
+	// 		return YM;
+	// 	}
+	// }
+	// if (Yplus === 1) {
+	// 	if (character.position.y < MOUSE_POINTED.position.y) {
+	// 		return YP;
+	// 	}
+	// }
+	// return UA;
 }
 
 
@@ -170,12 +188,20 @@ var getMapLocation = (vectorLocation) => {
 	}
 }
 
+var getActualPosition = (mapVector) => {
+	return new THREE.Vector3(
+		defaultMapGeometry.x + (mapVector.x * blockSize),
+		defaultMapGeometry.y + (mapVector.y * blockSize),
+		defaultMapGeometry.z - (mapVector.z * blockSize)
+	);
+}
+
 // ========== MOUSE ACTION ==========
 var mouseListener = () => {
 	renderer.domElement.addEventListener('mousemove', (event) => {
 		event.preventDefault();
-		mouse.x = (event.clientX/window.innerWidth) * 2-1;
-		mouse.y = -(event.clientY/window.innerHeight) * 2+1;
+		mouse.x = (event.clientX/window.innerWidth) * 2 - 1;
+		mouse.y = -(event.clientY/window.innerHeight) * 2 + 1;
 	}, false);
 
 	renderer.domElement.addEventListener('click', onClick, false);

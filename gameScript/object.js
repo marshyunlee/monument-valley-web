@@ -7,14 +7,22 @@ var loadCharacter = async (scene) => {
 	mtlLoader.setPath('./asset/object/');
 
 	// load objects
-
 	await mtlLoader.load('character.mtl', (materials) => {
 		materials.preload();
 		objLoader.setMaterials(materials);
 		objLoader.load('character.obj', (object) => {
-			object.position.set(0, 0 - (6 * blockSize), 0 + (1 * blockSize));
+			// place character to the starting pos
+			let pos = getActualPosition({
+				x: Math.ceil(data.floorplan[0].length / 2),
+				y: 0,
+				z: Math.floor(data.floorplan.length / 2)
+			});
+			object.position.set(
+				pos.x,
+				pos.y,
+				pos.z
+			);
 			object.rotation.set(0, Math.PI/2, Math.PI/2);
-			// object.scale.set(1, 1, 1);
 			object.scale.set(0.2, 0.2, 0.2);
 
 			scene.add(object);
