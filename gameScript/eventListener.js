@@ -6,8 +6,12 @@ const GRAVITY = 1.0;
 let character;
 let MOUSE_POINTED;
 let CHARACTER_LOCATED;
-// ========== RESIZE ==========
 
+var stop = false;
+var frameCount = 0;
+var fpsInterval, startTime, now, then, elapsed;
+
+// ========== RESIZE ==========
 var resizeListener = () => {
 	window.addEventListener('resize', () => {
 		camera.aspect = window.innerWidth/window.innerHeight;
@@ -23,27 +27,38 @@ var loadListener = async () => {
 		document.body.style.background = `rgb(${settings.background})`;
 		floorplan = data.floorplan;
 		await initGame()
-		.then(await loadCharacter(scene))
-		.then(animate());
+		.then(await loadCharacter(scene)
+			.then(() => {
+				// limit frame rate based on the settings
+				fpsInterval = 1000 / settings.frameRate;
+				then = Date.now();
+				startTime = then;
+				animate();
+			})
+		);
 	});
 
 	const animate = () => {
-		// animate
 		requestAnimationFrame(animate);
-		if (controls) controls.update();
+		now = Date.now();
+		elapsed = now - then;
+		if (elapsed > fpsInterval) {
+			then = now - (elapsed % fpsInterval);
 
-		// gravity action
-		applyGravity();
-
-		// cursor action
-		applyMovement();
-		
-		// render
-		renderer.render(scene, camera);
+			// gravity action
+			applyGravity();
+			// cursor action
+			applyMovement();
+			
+			// render
+			if (controls) controls.update();
+			renderer.render(scene, camera);
+		}	
 	}
 }
 
 var applyGravity = () => {
+	// console.log(character.position);
 	gravityRay.set(character.position, new THREE.Vector3(0, 0, -1));
 	scene.add(new THREE.ArrowHelper(gravityRay.ray.direction, gravityRay.ray.origin, 300, 0xff0000, 0, 0));
 	const standingPlatforms = gravityRay.intersectObjects(scene.children);

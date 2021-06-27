@@ -75,7 +75,6 @@ const initGame = async () => {
 	floorplanRenderer();
 	resizeListener();
 	mouseListener();
-	await Promise.resolve();
 }
 
 const floorplanRenderer = () => {
@@ -252,6 +251,7 @@ class Light {
 
 let data = {
 	"settings": {
+		"frameRate": 60,
 		"offsetY": -30,
 		"background": "0, 0, 16",
 		"globalLight": "255, 255, 255",
