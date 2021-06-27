@@ -1,15 +1,25 @@
+// ======misc=====
 const mouse = new THREE.Vector2();
 const mousePointer = new THREE.Raycaster();
 const gravityRay= new THREE.Raycaster();
 const GRAVITY = 1.0;
 const MOVEMENT = 2.0;
 
+// =====Event Triggers======
 const INTRO = new THREE.Vector3(10, 11, 2);
 // const ... = new THREE.Vector3();
 // const ... = new THREE.Vector3();
 const PORTFOLIO = new THREE.Vector3(10, 11, 8);
 const CONTACT = new THREE.Vector3(10, 6, 11);
 
+// =====Directions=====
+const XM = 0; // -x
+const XP = 1; // +x
+const YM = 2; // -y
+const YP = 3; // +y 
+const UA = 4; // unreachable/arrival
+
+// =====variables=====
 let character;
 let MOUSE_POINTED;
 let CHARACTER_LOCATED;
@@ -101,17 +111,16 @@ var watchCursor = () => {
 
 var applyMovement = () => {
 	if (isMoving) {
-		validatePath();
-		if (character.position.x > MOUSE_POINTED.position.x) {
+		if (findDirection() === XM) {
 			character.rotation.set(Math.PI/2, -Math.PI/2, 0);
 			character.position.set(character.position.x - MOVEMENT, character.position.y, character.position.z);
-		} else if (character.position.x < MOUSE_POINTED.position.x) {
+		} else if (findDirection() === XP) {
 			character.rotation.set(0, Math.PI/2, Math.PI/2);
 			character.position.set(character.position.x + MOVEMENT, character.position.y, character.position.z);
-		} else if (character.position.y > MOUSE_POINTED.position.y) {
+		} else if (findDirection() === YM) {
 			character.rotation.set(Math.PI/2, 0, 0);
 			character.position.set(character.position.x, character.position.y - MOVEMENT, character.position.z);
-		} else if (character.position.y < MOUSE_POINTED.position.y) {
+		} else if (findDirection() === YP) {
 			character.rotation.set(-Math.PI/2, 0, Math.PI);
 			character.position.set(character.position.x, character.position.y + MOVEMENT, character.position.z);
 		} else {
@@ -120,9 +129,36 @@ var applyMovement = () => {
 	}
 }
 
-var validatePath = () => {
+var findDirection = () => {
 	let curr = getMapLocation(character.position);
-	console.log(curr);
+	// console.log(curr);
+	console.log(character.position);
+	let Xplus = curr.x + 1 > data.floorplan[curr.z].length - 1 ? 0 : data.floorplan[curr.z][curr.x + 1][curr.y];
+	let Xminus = curr.x - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x - 1][curr.y];
+	let Yplus = curr.y + 1 > data.floorplan[curr.z][curr.x].length - 1 ? 0 : data.floorplan[curr.z][curr.x][curr.y + 1];
+	let Yminus = curr.y - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x][curr.y - 1];
+
+	if (Xminus === 1) {
+		if (character.position.x > MOUSE_POINTED.position.x) {
+			return XM;
+		}
+	}
+	if (Xplus === 1) {
+		if (character.position.x < MOUSE_POINTED.position.x) {
+			return XP;
+		}
+	}
+	if (Yminus === 1) {
+		if (character.position.y > MOUSE_POINTED.position.y) {
+			return YM;
+		}
+	}
+	if (Yplus === 1) {
+		if (character.position.y < MOUSE_POINTED.position.y) {
+			return YP;
+		}
+	}
+	return UA;
 }
 
 

@@ -49,7 +49,7 @@ const initGame = async () => {
 
 	// camera
 	camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearView, farView)
-	camera.position.set(800, -800, 800);
+	camera.position.set(700, -700, 700);
 	camera.up = new THREE.Vector3(0, 0, 1) 
 
 	// light
@@ -77,7 +77,6 @@ const initGame = async () => {
 }
 
 const floorplanRenderer = () => {
-	let startingX = Math.ceil(floorplan.length/2) - 1;
 	let zPos = -monumentSquareSize - settings.offsetY
 	let yPos = 0;
 	let xPos = 0;
@@ -102,9 +101,6 @@ const floorplanRenderer = () => {
 				yPos -= blockSize;
 				switch (cell) {
 					case CELL_BLOCK:
-						if (z === startingX && !startingPosition) {
-							startingPosition = new THREE.Vector3(xPos, yPos, zPos);
-						}
 						shape = new Cube(
 							xPos, yPos, zPos,
 							`rgb(${settings.cellColor})`,
@@ -383,7 +379,7 @@ let data = {
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0],
 			[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		],
 		[
@@ -397,7 +393,7 @@ let data = {
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
 			[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		],
 		[
