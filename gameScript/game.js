@@ -93,7 +93,7 @@ const floorplanRenderer = () => {
 				let cell = floorplan[reversedZ][reversedX][reversedY];
 				let upperCell = reversedZ-1 >= 0 && reversedZ-1 <= floorplan.length ? floorplan[reversedZ-1][reversedX][reversedY] : 0;
 				let isPlatform =
-					(cell === CELL_BLOCK || cell === CELL_STAIRS) &&
+					(cell === CELL_BLOCK) &&
 					(upperCell === CELL_BLANK || upperCell === CELL_PILLAR)
 					? true : false;
 				
@@ -102,7 +102,7 @@ const floorplanRenderer = () => {
 				switch (cell) {
 					case CELL_BLOCK:
 						let platform = Math.floor(data.floorplan.length / 2);
-						if (reversedZ >= platform - 3 && reversedZ <= platform + 3) {
+						if (reversedZ >= platform - 2 && reversedZ <= platform + 2) {
 							shape = new Cube(
 								xPos, yPos, zPos,
 								`rgb(${settings.cellColor})`,
@@ -114,7 +114,6 @@ const floorplanRenderer = () => {
 								xPos, yPos, zPos,
 								`rgb(${settings.cellColor})`,
 								blockSize,
-								isPlatform,
 								new THREE.Vector3(Math.random(), Math.random(), Math.random())
 							);
 						}
@@ -133,8 +132,7 @@ const floorplanRenderer = () => {
 							`rgb(${settings.cellColor})`,
 							`${assetPath}/stairs.json`,
 							1,
-							7.855,
-							isPlatform
+							7.855
 						);
 						break;
 					case CELL_LIGHT:

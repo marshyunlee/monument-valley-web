@@ -31,7 +31,9 @@ var frameCount = 0;
 var fpsInterval, startTime, now, then, elapsed;
 
 var isMoving = false;
-var path = [new THREE.Vector3()];
+var path = [];
+
+var blockOnCursor;
 
 // ========== RESIZE ==========
 var resizeListener = () => {
@@ -61,8 +63,8 @@ var loadListener = async () => {
 	});
 
 	defaultMapGeometry = new THREE.Vector3(
-		0 - (Math.ceil(data.floorplan[0][0].length / 2) * blockSize),
-		0 - (Math.ceil(data.floorplan[0].length / 2) * blockSize),
+		0 - (Math.floor(data.floorplan[0].length / 2) * blockSize),
+		0 - (Math.floor(data.floorplan[0].length / 2) * blockSize),
 		0 + (Math.ceil(data.floorplan.length / 2) * blockSize)
 	);
 
@@ -109,8 +111,16 @@ var watchCursor = () => {
 		mousePointer.setFromCamera(mouse, camera);
 		const intersects = mousePointer.intersectObjects(scene.children);
 		if (intersects.length > 0) {
-			if (MOUSE_POINTED !== intersects[0].object && intersects[0].object.type === TYPE_PLATFORM) {
+			if (MOUSE_POINTED !== intersects[0].object &&
+				intersects[0].object.type === TYPE_PLATFORM &&
+				intersects[0].object.position.z === Math.floor(data.floorplan.length / 2)
+			) {
 				MOUSE_POINTED = intersects[0].object;
+				if (MOUSE_POINTED !== blockOnCursor) {
+					if (blockOnCursor !== undefined) blockOnCursor.material.color.set(`rgb(${data.settings.cellColor})`);
+					blockOnCursor = MOUSE_POINTED;
+					blockOnCursor.material.color.set(0xFFFFFF);
+				}	
 			}
 		} else {
 			MOUSE_POINTED = undefined;
@@ -120,66 +130,104 @@ var watchCursor = () => {
 
 var applyMovement = () => {
 	if (isMoving) {
-		let curr = getMapLocation(character.position);
-		let dest = getMapLocation(MOUSE_POINTED.position);
-		if (path.length === 0 || curr === dest) {
+		if (path.length === 0) {
+			console.log("arrived!");
 			isMoving = false;
-			path = [];
+			MOUSE_POINTED.material.color.set(`rgb(${data.settings.cellColor})`);
 		} else {
-			character.position.set(MOUSE_POINTED.position.x, MOUSE_POINTED.position.y, MOUSE_POINTED.position.z + Math.ceil(blockSize / 2));
-		}
-		isMoving = false;
+			let next = getActualPosition(path[0]);
+			if (character.position.x > next.x) {
+				character.rotation.set(Math.PI/2, -Math.PI/2, 0);
+				character.position.set(character.position.x - MOVEMENT, character.position.y, character.position.z);
+			} else if (character.position.x < next.x) {
+				character.rotation.set(0, Math.PI/2, Math.PI/2);
+				character.position.set(character.position.x + MOVEMENT, character.position.y, character.position.z);
+			} else if (character.position.y > next.y) {
+				character.rotation.set(Math.PI/2, 0, 0);
+				character.position.set(character.position.x, character.position.y - MOVEMENT, character.position.z);
+			} else if (character.position.y < next.y) {
+				character.rotation.set(-Math.PI/2, 0, Math.PI);
+				character.position.set(character.position.x, character.position.y + MOVEMENT, character.position.z);
+			}
 
-
-		if (findDirection() === XM) {
-			character.rotation.set(Math.PI/2, -Math.PI/2, 0);
-			character.position.set(character.position.x - MOVEMENT, character.position.y, character.position.z);
-		} else if (findDirection() === XP) {
-			character.rotation.set(0, Math.PI/2, Math.PI/2);
-			character.position.set(character.position.x + MOVEMENT, character.position.y, character.position.z);
-		} else if (findDirection() === YM) {
-			character.rotation.set(Math.PI/2, 0, 0);
-			character.position.set(character.position.x, character.position.y - MOVEMENT, character.position.z);
-		} else if (findDirection() === YP) {
-			character.rotation.set(-Math.PI/2, 0, Math.PI);
-			character.position.set(character.position.x, character.position.y + MOVEMENT, character.position.z);
+			if (character.position.x === next.x && character.position.y === next.y) {
+				path.shift();
+				console.log(path.length + ' nodes to the destination!');
+			}
 		}
 	}
 }
 
-// scan the path, and udpate the path variable
-var findDirection = () => {
-	let currLoc = getMapLocation(character.position);
-	let position = getActualPosition(currLoc);
-	// let Xplus = curr.x + 1 > data.floorplan[curr.z].length - 1 ? 0 : data.floorplan[curr.z][curr.x + 1][curr.y];
-	// let Xminus = curr.x - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x - 1][curr.y];
-	// let Yplus = curr.y + 1 > data.floorplan[curr.z][curr.x].length - 1 ? 0 : data.floorplan[curr.z][curr.x][curr.y + 1];
-	// let Yminus = curr.y - 1 < 0 ? 0 : data.floorplan[curr.z][curr.x][curr.y - 1];
+// BFS pathfinding
+var findPath = async (destination) => {
+	let dest = getMapLocation(destination);
+	let start = getMapLocation(character.position);
 
-	// if (Xminus === 1) {
-	// 	if (character.position.x > MOUSE_POINTED.position.x) {
-	// 		return XM;
-	// 	}
-	// }
-	// if (Xplus === 1) {
-	// 	if (character.position.x < MOUSE_POINTED.position.x) {
-	// 		return XP;
-	// 	}
-	// }
-	// if (Yminus === 1) {
-	// 	if (character.position.y > MOUSE_POINTED.position.y) {
-	// 		return YM;
-	// 	}
-	// }
-	// if (Yplus === 1) {
-	// 	if (character.position.y < MOUSE_POINTED.position.y) {
-	// 		return YP;
-	// 	}
-	// }
-	// return UA;
+	let queue = [start];
+	let parents = {};
+
+	while (queue.length > 0) {
+		let curr = queue.shift();
+		let currKey = `${curr.x}x${curr.y}`
+		// XM, XP, YM, YP
+		let neighbors = [
+			{z: curr.z, x: curr.x - 1, y: curr.y},
+			{z: curr.z, x: curr.x + 1, y: curr.y},
+			{z: curr.z, x: curr.x, y: curr.y - 1},
+			{z: curr.z, x: curr.x, y: curr.y + 1}
+		];
+
+		for (let i = 0; i < neighbors.length; i++) {
+			const tempZ = neighbors[i].z;
+			const tempX = neighbors[i].x;
+			const tempY = neighbors[i].y;
+
+			// do nothing if the neighbor is out of the grid
+			if (tempX < 0 || tempX > data.floorplan[0].length - 1 ||
+				tempY < 0 || tempY > data.floorplan[0].length - 1) {
+				continue;
+			}
+
+			if (data.floorplan[tempZ][tempX][tempY] !== 1) {
+				continue;
+			}
+			
+			let temp = {
+				z: tempZ,
+				x: tempX,
+				y: tempY
+			}
+			let tempKey = `${temp.x}x${temp.y}`
+
+			if (tempKey in parents) {
+				continue;
+			}
+			
+			parents[tempKey] = {
+				key: currKey,
+				platform: curr
+			};
+
+			queue.push(neighbors[i]);
+		}
+	}
+
+	// configure path
+	let path = [];
+	let destKey = `${dest.x}x${dest.y}`
+	let backword = dest;
+
+	while (backword !== start) {
+		path.push(backword);
+
+		const { key, platform } = parents[destKey];
+		backword = platform;
+		destKey = key;
+	}
+	return path.reverse();
 }
 
-
+// map coordinates: { z, x, y }
 var getMapLocation = (vectorLocation) => {
 	return {
 		z: Math.ceil(Math.abs(vectorLocation.z/20 - 11)),
@@ -190,9 +238,9 @@ var getMapLocation = (vectorLocation) => {
 
 var getActualPosition = (mapVector) => {
 	return new THREE.Vector3(
-		defaultMapGeometry.x + (mapVector.x * blockSize),
-		defaultMapGeometry.y + (mapVector.y * blockSize),
-		defaultMapGeometry.z - (mapVector.z * blockSize)
+		mapVector.x === undefined ? 0 : defaultMapGeometry.x + (mapVector.x * blockSize),
+		mapVector.y === undefined ? 0 : defaultMapGeometry.y + (mapVector.y * blockSize),
+		mapVector.z === undefined ? 0 : defaultMapGeometry.z - (mapVector.z * blockSize)
 	);
 }
 
@@ -208,7 +256,7 @@ var mouseListener = () => {
 	renderer.domElement.addEventListener('touchstart', onClick, false);
 }
 
-var onClick = (event) => {
+var onClick = async (event) => {
 	// current location of the character (block-based) for debugging
 	// let curr = getMapLocation(character.position);
 	// console.log(curr);
@@ -216,8 +264,11 @@ var onClick = (event) => {
 	// reset the destination upon click
 	isMoving = false;
 	watchCursor();
+	path = [];
 	event.preventDefault();
 	if (MOUSE_POINTED) {
+		MOUSE_POINTED.material.color.set(0xFFFFFF);
 		isMoving = true;
+		path = await findPath(MOUSE_POINTED.position);
 	}
 }
