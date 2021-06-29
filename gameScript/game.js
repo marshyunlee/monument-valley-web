@@ -11,6 +11,8 @@ let monumentHeight;
 let ambient;
 let startingPosition;
 let clock = new THREE.Clock();
+let progress = [];
+let pointLights = [];
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -53,7 +55,7 @@ const initGame = async () => {
 	camera.up = new THREE.Vector3(0, 0, 1) 
 
 	// light
-	light = new THREE.PointLight(`rgb(${settings.globalLight})`, 12, 1000);
+	light = new THREE.PointLight(`rgb(${settings.globalLight})`, 5, 1100);
 	light.position.set(600, -200, 250 + monumentHeight);
 	light.castShadow = true;
 	ambient = new THREE.AmbientLight(`rgb(${settings.ambientLight})`); 
@@ -77,6 +79,7 @@ const initGame = async () => {
 }
 
 const floorplanRenderer = () => {
+	let platform = Math.floor(data.floorplan.length / 2);
 	let zPos = -monumentSquareSize - settings.offsetY
 	let yPos = 0;
 	let xPos = 0;
@@ -101,8 +104,7 @@ const floorplanRenderer = () => {
 				yPos -= blockSize;
 				switch (cell) {
 					case CELL_BLOCK:
-						let platform = Math.floor(data.floorplan.length / 2);
-						if (reversedZ >= platform - 2 && reversedZ <= platform + 2) {
+						if (reversedZ >= platform - 3 && reversedZ <= platform + 3) {
 							shape = new Cube(
 								xPos, yPos, zPos,
 								`rgb(${settings.cellColor})`,
@@ -114,6 +116,7 @@ const floorplanRenderer = () => {
 								xPos, yPos, zPos,
 								`rgb(${settings.cellColor})`,
 								blockSize,
+								0,
 								new THREE.Vector3(Math.random(), Math.random(), Math.random())
 							);
 						}
@@ -136,11 +139,21 @@ const floorplanRenderer = () => {
 						);
 						break;
 					case CELL_LIGHT:
-						shape = new Light(
-							xPos, yPos, zPos,
-							`rgb(${settings.pointLight})`,
-							settings.pointLightScale
-						);
+						if (reversedZ >= platform - 5 && reversedZ <= platform) {
+							shape = new Light(
+								xPos, yPos, zPos,
+								`rgb(${settings.pointLight})`,
+								settings.pointLightScale,
+								0
+							);
+						} else {
+							shape = new Light(
+								xPos, yPos, zPos,
+								`rgb(${settings.pointLight})`,
+								settings.pointLightScale,
+								1
+							);
+						}
 						break;
 					case CELL_PILLAR:
 						shape = new Shape(
@@ -229,16 +242,17 @@ class Shape {
 }
 
 class Light {
-	constructor(x, y, z, color, size = 0) {
+	constructor(x, y, z, color, size = 0, show = 1) {
 		this.x = x;
 		this.y = y;
-		this.z = z;
+		this.z = z - 5;
 		this.color = color;
 		this.size = size;
+		this.show = show;
 	}
 
 	render() {
-		let pointLight = new THREE.PointLight(this.color, 1.1, 100);
+		let pointLight = new THREE.PointLight(this.color, 2.5, 160, 2);
 
 		if (this.size !== 0) {
 			let sphereGeometry = new THREE.SphereGeometry(this.size, 50, 50);
@@ -253,7 +267,12 @@ class Light {
 		pointLight.position.set(this.x, this.y, this.z + Math.sin(time*3)*10);
 		pointLight.castShadow = true;
 
-		scene.add(pointLight);
+		pointLights.push(pointLight);
+		if (this.show) {
+			scene.add(pointLight);
+		} else {
+			progress.push(pointLight);
+		}
 	}	
 }
 
@@ -383,46 +402,46 @@ let data = {
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		],
 		[
-			[0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 4],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0],
-			[0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		],
 		[
-			[0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
-			[0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
-			[0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 3],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+			[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 		],
 		[
-			[0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1],
-			[0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
-			[0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+			[0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+			[0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0],
+			[0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1],
 			[0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
 			[0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
 			[0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0],
 			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 			[0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0],
 			[0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
-			[0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1],
-			[0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0],
-			[0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0]
+			[0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1],
+			[0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0],
+			[1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0]
 		],
 		[
 			[0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],

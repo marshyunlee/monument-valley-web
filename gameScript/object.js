@@ -30,3 +30,23 @@ var loadCharacter = async (scene) => {
 		});
 	});
 }
+
+var loadIntro = async () => {
+
+}
+
+var loadSomething = async () => {
+	
+}
+
+var loadElse = async () => {
+	
+}
+
+var loadPortfolio = async () => {
+	
+}
+
+var loadContact = async () => {
+	
+}

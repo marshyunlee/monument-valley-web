@@ -8,11 +8,11 @@ const MOVEMENT = 2.0;
 let defaultMapGeometry = new THREE.Vector3(0, 0, 0);
 
 // =====Event Triggers======
-const INTRO = new THREE.Vector3(10, 11, 2);
-// const ... = new THREE.Vector3();
-// const ... = new THREE.Vector3();
-const PORTFOLIO = new THREE.Vector3(10, 11, 8);
-const CONTACT = new THREE.Vector3(10, 6, 11);
+const INTRO 	= { z: 10, x: 11, y: 1 };
+const PORTFOLIO = { z: 10, x: 10, y: 8 };
+const some1		= { z: 10, x: 2, y: 10 };
+const some2	 	= { z: 10, x: 1, y: 3 };
+const CONTACT 	= { z: 10, x: 6, y: 11 };
 
 // =====Directions=====
 const XM = 0; // -x
@@ -51,6 +51,7 @@ var loadListener = async () => {
 		document.body.style.background = `rgb(${settings.background})`;
 		floorplan = data.floorplan;
 		await initGame()
+		.then(scene.add(progress.shift()))
 		.then(await loadCharacter(scene)
 			.then(() => {
 				// limit frame rate based on the settings
@@ -129,6 +130,17 @@ var watchCursor = () => {
 }
 
 var applyMovement = () => {
+	let currentPos = getMapLocation(character.position);
+	if (progress.length === 4 && (currentPos.x === INTRO.x && currentPos.y === INTRO.y)) {
+		scene.add(progress.shift());
+	} else if (progress.length === 3 && (currentPos.x === PORTFOLIO.x && currentPos.y === PORTFOLIO.y)) {
+		scene.add(progress.shift());
+	} else if (progress.length === 2 && (currentPos.x === some1.x && currentPos.y === some1.y)) {
+		scene.add(progress.shift());
+	} else if (progress.length === 1 && (currentPos.x === some2.x && currentPos.y === some2.y)) {
+		scene.add(progress.shift());
+	}
+
 	if (isMoving) {
 		if (path.length === 0) {
 			console.log("arrived!");
@@ -162,6 +174,7 @@ var applyMovement = () => {
 var findPath = async (destination) => {
 	let dest = getMapLocation(destination);
 	let start = getMapLocation(character.position);
+	let destKey = `${dest.x}x${dest.y}`
 
 	let queue = [start];
 	let parents = {};
@@ -169,6 +182,12 @@ var findPath = async (destination) => {
 	while (queue.length > 0) {
 		let curr = queue.shift();
 		let currKey = `${curr.x}x${curr.y}`
+
+		// no need to run any further
+		if (currKey === destKey) {
+			break;
+		}
+
 		// XM, XP, YM, YP
 		let neighbors = [
 			{z: curr.z, x: curr.x - 1, y: curr.y},
@@ -214,7 +233,6 @@ var findPath = async (destination) => {
 
 	// configure path
 	let path = [];
-	let destKey = `${dest.x}x${dest.y}`
 	let backword = dest;
 
 	while (backword !== start) {
@@ -265,6 +283,7 @@ var onClick = async (event) => {
 	isMoving = false;
 	watchCursor();
 	path = [];
+
 	event.preventDefault();
 	if (MOUSE_POINTED) {
 		MOUSE_POINTED.material.color.set(0xFFFFFF);
