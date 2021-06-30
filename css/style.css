@@ -235,11 +235,11 @@ input[type=button] {
 
 #content-wrapper h2,
 #text-no-webgl h2 {
-  font-size: 1em;
+  font-size: 1.5em;
   font-weight: 300;
   line-height: 2em;
   letter-spacing: 0.25em;
-  max-width: 20em;
+  max-width: 1000em;
 }
 
 #content-wrapper span.pre-title,
@@ -366,7 +366,7 @@ div.wrapper {
 }
 
 .button {
-  margin: 2em auto 0 auto;
+  margin: 1em auto 0 auto;
   padding: 0em;
   width: 4.5em;
   height: 4.5em;
@@ -472,7 +472,7 @@ hr {
 
 #edit-wrapper .edit-inner form input[type=submit],
 #edit-wrapper .edit-inner form input[type=button] {
-  margin: 1.5em;
+  margin: 1.0em;
   width: 6.5em;
   height: 6.5em;
   line-height: 5.5em;

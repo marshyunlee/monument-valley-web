@@ -1,18 +1,18 @@
 // ======misc=====
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 const mouse = new THREE.Vector2();
 const mousePointer = new THREE.Raycaster();
 const gravityRay= new THREE.Raycaster();
 const GRAVITY = 1.0;
-const MOVEMENT = 2.0;
+const MOVEMENT = 2.5;
 // actual coordinates of floorplan[0][0][0]
 let defaultMapGeometry = new THREE.Vector3(0, 0, 0);
 
 // =====Event Triggers======
-const INTRO 	= { z: 10, x: 11, y: 1 };
-const PORTFOLIO = { z: 10, x: 10, y: 8 };
-const some1		= { z: 10, x: 2, y: 10 };
-const some2	 	= { z: 10, x: 1, y: 3 };
+const INTRO 	= { z: 10, x: 10, y: 2 };
+const PORTFOLIO = { z: 10, x: 2, y: 9 };
 const CONTACT 	= { z: 10, x: 6, y: 11 };
+let eventRunning = false; 
 
 // =====Directions=====
 const XM = 0; // -x
@@ -129,21 +129,35 @@ var watchCursor = () => {
 	}
 }
 
-var applyMovement = () => {
+var openURL = async (URL) => {
+	if (!eventRunning) {
+		eventRunning = true;
+		window.open(URL);
+	}
+}
+
+var applyMovement = async () => {
 	let currentPos = getMapLocation(character.position);
-	if (progress.length === 4 && (currentPos.x === INTRO.x && currentPos.y === INTRO.y)) {
-		scene.add(progress.shift());
-	} else if (progress.length === 3 && (currentPos.x === PORTFOLIO.x && currentPos.y === PORTFOLIO.y)) {
-		scene.add(progress.shift());
-	} else if (progress.length === 2 && (currentPos.x === some1.x && currentPos.y === some1.y)) {
-		scene.add(progress.shift());
-	} else if (progress.length === 1 && (currentPos.x === some2.x && currentPos.y === some2.y)) {
-		scene.add(progress.shift());
+	if (currentPos.x === INTRO.x && currentPos.y === INTRO.y) {
+		if (progress.length === 2) {
+			scene.add(progress.shift());
+		}
+		await openURL("AboutMe.html");
+	} else if (currentPos.x === PORTFOLIO.x && currentPos.y === PORTFOLIO.y) {
+		if (progress.length === 1) {
+			scene.add(progress.shift());
+		}
+		await openURL("Portfolio.html");
+	} else if (progress.length === 0 && (currentPos.x === CONTACT.x && currentPos.y === CONTACT.y)) {
+		await openURL("contact.html");
+	} else if (!(currentPos.x === INTRO.x && currentPos.y === INTRO.y) &&
+				!(currentPos.x === PORTFOLIO.x && currentPos.y === PORTFOLIO.y) &&
+				!(currentPos.x === CONTACT.x && currentPos.y === CONTACT.y)) {
+		eventRunning = false;
 	}
 
 	if (isMoving) {
 		if (path.length === 0) {
-			console.log("arrived!");
 			isMoving = false;
 			MOUSE_POINTED.material.color.set(`rgb(${data.settings.cellColor})`);
 		} else {
@@ -164,7 +178,6 @@ var applyMovement = () => {
 
 			if (character.position.x === next.x && character.position.y === next.y) {
 				path.shift();
-				console.log(path.length + ' nodes to the destination!');
 			}
 		}
 	}
@@ -270,11 +283,11 @@ var mouseListener = () => {
 		mouse.y = -(event.clientY/window.innerHeight) * 2 + 1;
 	}, false);
 
-	renderer.domElement.addEventListener('click', onClick, false);
-	renderer.domElement.addEventListener('touchstart', onClick, false);
+	renderer.domElement.addEventListener('click', onmousedown, false);
+	renderer.domElement.addEventListener('touchstart', onmousedown, false);
 }
 
-var onClick = async (event) => {
+var onmousedown = async (event) => {
 	// current location of the character (block-based) for debugging
 	// let curr = getMapLocation(character.position);
 	// console.log(curr);
