@@ -17,11 +17,19 @@ var loadCharacter = async (scene) => {
 				y: 0,
 				z: Math.floor(data.floorplan.length / 2)
 			});
-			object.position.set(
-				pos.x,
-				pos.y,
-				pos.z
-			);
+			if (isBonus) {
+				object.position.set(
+					Math.ceil(data.bonusStage[0].length / 2),
+					0,
+					Math.floor(data.bonusStage.length / 2)
+				);
+			} else {
+				object.position.set(
+					pos.x,
+					pos.y,
+					pos.z
+				);
+			}
 			object.rotation.set(0, Math.PI/2, Math.PI/2);
 			object.scale.set(0.2, 0.2, 0.2);
 
