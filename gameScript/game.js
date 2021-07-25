@@ -22,8 +22,7 @@ const aspectRatio = width/height;
 const fieldOfView = 25;
 const nearView = 1;
 const farView = 10000;
-const assetPath = 'marshall-yun-lee.github.io/monument-valley-web/asset/cell';
-// const assetPath = '/asset/cell';
+const assetPath = '/asset/cell';
 const blockSize = 20;
 
 const TYPE_PLATFORM = 'platform';
