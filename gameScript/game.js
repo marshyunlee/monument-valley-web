@@ -72,6 +72,9 @@ const initGame = async () => {
 	controls.maxDistance = 2000;
 	controls.enableDamping = true;
 	controls.dampingFactor = 0.2;
+	
+	controls.autoRotate = true;
+	controls.autoRotateSpeed = -1;
 
 	document.body.appendChild(renderer.domElement);
 
@@ -288,8 +291,9 @@ let data = {
 		"ambientLight": "0, 0, 32",
 		"cellColor": "133, 130, 187",
 		"tail": "167, 97, 158",
-		"pointLight": "255, 173, 236",
-		"pointLightScale": 3,
+		"pointLight": "255, 246, 178",
+		// "pointLight": "255, 173, 236",
+		"pointLightScale": 3.5,
 	},
 	"floorplan": [
 		[

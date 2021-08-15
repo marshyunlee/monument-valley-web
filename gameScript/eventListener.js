@@ -350,6 +350,7 @@ var mouseListener = () => {
 }
 
 var onMouseDown = async (event) => {
+	controls.autoRotate = false; 
 	isMoving = false;
 	
 	let intersects;
