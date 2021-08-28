@@ -91,7 +91,7 @@ const floorplanRenderer = () => {
 	for (let z = 0; z < floorplan.length; z++) {
 		let reversedZ = floorplan.length - (z + 1);
 		zPos += blockSize;
-		xPos = monumentSquareSize/2;
+		xPos = monumentSquareSize/2;3
 		for (let x = 0; x < floorplan[reversedZ].length; x++) {
 			let reversedX = floorplan[reversedZ].length - (x + 1);
 			xPos -= blockSize;
@@ -297,7 +297,7 @@ let data = {
 	},
 	"floorplan": [
 		[
-			[1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0],
+			[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -555,7 +555,7 @@ let data = {
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0],
+			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 			[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
