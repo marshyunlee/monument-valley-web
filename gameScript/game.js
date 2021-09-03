@@ -74,7 +74,7 @@ const initGame = async () => {
 	controls.dampingFactor = 0.2;
 	
 	controls.autoRotate = true;
-	controls.autoRotateSpeed = -1;
+	controls.autoRotateSpeed = -2;
 
 	document.body.appendChild(renderer.domElement);
 
