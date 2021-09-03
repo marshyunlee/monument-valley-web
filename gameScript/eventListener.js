@@ -337,8 +337,6 @@ var findPath = async (destination) => {
 	return out;
 }
 
-
-
 // map coordinates: { z, x, y }
 var getMapLocation = (vectorLocation) => {
 	return {
@@ -383,11 +381,19 @@ var onMouseDown = async (event) => {
 		intersects = mousePointer.intersectObjects(scene.children);
 
 		if (intersects !== null && intersects.length > 0) {
-			if (MOUSE_POINTED !== intersects[0].object &&
-				intersects[0].object.type === TYPE_PLATFORM &&
-				intersects[0].object.position.z === Math.floor(data.floorplan.length / 2)
+			let target;
+			for (let i = 0; i < intersects.length; i++) {
+				if (intersects[i].object.type === TYPE_PLATFORM) {
+					target = intersects[i].object;
+					break;
+				}
+			}
+			
+			if (target !== null && 
+				MOUSE_POINTED !== target &&
+				target.position.z === Math.floor(data.floorplan.length / 2)
 			) {
-				MOUSE_POINTED = intersects[0].object;
+				MOUSE_POINTED = target;
 				if (MOUSE_POINTED !== blockOnCursor) {
 					if (blockOnCursor !== undefined) blockOnCursor.material.color.set(`rgb(${data.settings.cellColor})`);
 					blockOnCursor = MOUSE_POINTED;
