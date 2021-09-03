@@ -9,6 +9,7 @@ const MOVEMENT = 2.5;
 let defaultMapGeometry = new THREE.Vector3(0, 0, 0);
 
 // =====Event Triggers======
+const DEST_BLACKLIST = [{ z: 10, x: 9, y: 2 }, { z: 10, x: 8, y: 8 }, { z: 10, x: 4, y: 6 }, { z: 10, x: 2 , y: 10 }]
 const INTRO 	= { z: 10, x: 10, y: 2 };
 const PORTFOLIO = { z: 10, x: 9, y: 8 };
 const CONTACT 	= { z: 10, x: 3, y: 6 };
@@ -97,6 +98,7 @@ var loadListener = async () => {
 				} else if (pointLights[i].position.z <= pointLightsZ[i] - 4) {
 					upDown = true;
 				}
+
 				if (upDown) {
 					pointLights[i].position.lerp(new THREE.Vector3(pointLights[i].position.x, pointLights[i].position.y, pointLightsZ[i] + 15), 0.02);
 				} else {
@@ -249,8 +251,13 @@ var applyMovement = async () => {
 var findPath = async (destination) => {
 	let dest = getMapLocation(destination);
 	let start = getMapLocation(character.position);
-	let destKey = `${dest.x}x${dest.y}`
+	
+	// no need to calc this case
+	if (dest.x === start.x && dest.y === start.y) {
+		return [];
+	}
 
+	let destKey = `${dest.x}x${dest.y}`
 	let queue = [start];
 	let parents = {};
 
@@ -317,8 +324,20 @@ var findPath = async (destination) => {
 		backword = platform;
 		destKey = key;
 	}
-	return path.reverse();
+	out = path.reverse();
+	
+	// make sure the character does not step on non-platform blocks
+	for (let i = 0; i < DEST_BLACKLIST.length; i++) {
+		if (out[out.length - 1].x === DEST_BLACKLIST[i].x &&
+			out[out.length - 1].y === DEST_BLACKLIST[i].y) {
+			out.pop();
+			break;
+		}
+	}
+	return out;
 }
+
+
 
 // map coordinates: { z, x, y }
 var getMapLocation = (vectorLocation) => {
@@ -357,7 +376,7 @@ var onMouseDown = async (event) => {
 	if (!isMoving) {
 		if (isMobile()) {
 			mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
-			mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+			mouse.y = - (event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
 		}
 
 		mousePointer.setFromCamera(mouse, camera);
@@ -378,9 +397,7 @@ var onMouseDown = async (event) => {
 		} else {
 			MOUSE_POINTED = undefined;
 		}
-		// watchCursor(event);
 
-		path = [];
 		if (MOUSE_POINTED) {
 			MOUSE_POINTED.material.color.set(0xFFFFFF);
 			isMoving = true;

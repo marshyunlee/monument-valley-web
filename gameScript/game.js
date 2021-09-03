@@ -91,7 +91,7 @@ const floorplanRenderer = () => {
 	for (let z = 0; z < floorplan.length; z++) {
 		let reversedZ = floorplan.length - (z + 1);
 		zPos += blockSize;
-		xPos = monumentSquareSize/2;3
+		xPos = monumentSquareSize/2;
 		for (let x = 0; x < floorplan[reversedZ].length; x++) {
 			let reversedX = floorplan[reversedZ].length - (x + 1);
 			xPos -= blockSize;
@@ -102,7 +102,7 @@ const floorplanRenderer = () => {
 				let upperCell = reversedZ-1 >= 0 && reversedZ-1 <= floorplan.length ? floorplan[reversedZ-1][reversedX][reversedY] : 0;
 				let isPlatform =
 					(cell === CELL_BLOCK) &&
-					(upperCell === CELL_BLANK || upperCell === CELL_PILLAR)
+					(upperCell === CELL_BLANK || upperCell === CELL_PILLAR || upperCell === CELL_TAIL)
 					? true : false;
 				
 				let shape = null;
