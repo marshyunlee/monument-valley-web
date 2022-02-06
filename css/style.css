@@ -616,7 +616,7 @@ hr {
 #content-wrapper #content main,
 #content-wrapper #content footer {
   margin: 0 auto;
-  padding-bottom: 1000px;
+  padding-bottom: 30%;
   max-width: 540px;
   text-align: center;
   display: block;
