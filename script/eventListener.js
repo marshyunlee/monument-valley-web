@@ -191,7 +191,7 @@ var applyGravity = () => {
 var openURL = async (URL) => {
 	if (!eventRunning) {
 		eventRunning = true;
-		window.open(URL);
+		window.open(URL, "_self");
 	}
 }
 
@@ -201,19 +201,19 @@ var applyMovement = async () => {
 		if (progress.length === 3) {
 			scene.add(progress.shift());
 		}
-		await openURL("AboutMe.html");
+		await openURL("#aboutme");
 	} else if (currentPos.x === PORTFOLIO.x && currentPos.y === PORTFOLIO.y) {
 		if (progress.length === 2) {
 			scene.add(progress.shift());
 		}
-		await openURL("Portfolio.html");
+		await openURL("#portfolio");
 	} else if ((currentPos.x === CONTACT.x && currentPos.y === CONTACT.y)) {
 		if (progress.length === 1) {
 			scene.add(progress.shift());
 		}
-		await openURL("contact.html");
+		await openURL("#contact");
 	} else if ((currentPos.x === BONUS.x && currentPos.y === BONUS.y)) {
-		await openURL("bonus.html");
+		await openURL("#landing");
 	} else if (!(currentPos.x === INTRO.x && currentPos.y === INTRO.y) &&
 				!(currentPos.x === PORTFOLIO.x && currentPos.y === PORTFOLIO.y) &&
 				!(currentPos.x === CONTACT.x && currentPos.y === CONTACT.y)) {

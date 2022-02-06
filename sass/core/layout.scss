@@ -12,9 +12,11 @@ body
 	margin: 0 auto;
 	padding: 0;
 	max-width: 1200px;
-	background: #43cbbb url('../img/valley/sky.png') no-repeat;
+	background: #43cbbb url('../img/valley/sky.png');
 	background-position: 50% 0%;
-	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-attachment: absolute;
+	background-size: auto;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -35,7 +37,7 @@ div.wrapper
 	margin: 0 auto;
 	padding: 0;
 	max-width: 1200px;
-	height: 1000px;
+	overflow: scroll;
 }
 
 .button
@@ -233,8 +235,8 @@ hr {
 
 #valley-wrapper
 {
-	position: relative;
-	display: block;
+	position: absolute;
+	display: inline-block;
 }
 
 .valley {
@@ -243,6 +245,8 @@ hr {
 	height: 480px;
 	max-width: 1200px;
 	max-height: 1025px;
+	display: inline-block;
+	overflow: hidden;
 }
 
 #valley-1 {
@@ -252,27 +256,27 @@ hr {
 #valley-2 {
 	//bottom: 0;
 	background: url('../img/valley/valley-2.png') no-repeat;
-	opacity: 0.9;
+	// opacity: 0.9;
 }
 #valley-3 {
 	//bottom: 0;
 	background: url('../img/valley/valley-3.png') no-repeat;
-	opacity: 0.85;
+	// opacity: 0.85;
 }
 #valley-4 {
 	//bottom: 0;
 	background: url('../img/valley/valley-4.png') no-repeat;
-	opacity: 0.8;
+	// opacity: 0.8;
 }
 #valley-5 {
 	//bottom: 0;
 	background: url('../img/valley/valley-5.png') no-repeat;
-	opacity: 0.75;
+	// opacity: 0.75;
 }
 #valley-6 {
 	//bottom: 0;
 	background: url('../img/valley/valley-6b.png') no-repeat;
-	opacity: 0.8;
+	// opacity: 0.8;
 }
 
 #valley-1, #valley-2, #valley-3, #valley-4, #valley-5, #valley-6   {

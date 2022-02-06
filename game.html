@@ -6,24 +6,25 @@
 	<title>Marshall Lee</title>
 	
 	<link rel="stylesheet" href="assets/css/main.css" />
+	<link rel="stylesheet" href="css/modal.css">
 	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 
 	<!-- THREE -->
-	<script src="gameScript/lib/three.js"></script>
-	<script src="gameScript/lib/OrbitControls.js"></script>
-	<script src="gameScript/lib/MTLLoader.js"></script>
-	<script src="gameScript/lib/OBJLoader.js"></script>
-	<script src="gameScript/lib/LegacyJSONLoader.js"></script>
-	<!-- <script src="gameScript/lib/domEvents.js"></script> -->
-	<!-- <script src="gameScript/lib/Refractor.js"></script> -->
-	<!-- <script src="gameScript/lib/WaterRefractionShader.js"></script> -->
+	<script src="script/lib/three.js"></script>
+	<script src="script/lib/OrbitControls.js"></script>
+	<script src="script/lib/MTLLoader.js"></script>
+	<script src="script/lib/OBJLoader.js"></script>
+	<script src="script/lib/LegacyJSONLoader.js"></script>
+	<!-- <script src="script/lib/domEvents.js"></script> -->
+	<!-- <script src="script/lib/Refractor.js"></script> -->
+	<!-- <script src="script/lib/WaterRefractionShader.js"></script> -->
 
 	<!-- local -->
-	<script src="gameScript/object.js"></script>
-	<script src="gameScript/eventListener.js"></script>
-	<script src="gameScript/game.js"></script>
-	<!-- <script src="gameScript/waterEffect.js"></script> -->
-	<!-- <script src="gameScript/fish.js"></script> -->
+	<script src="script/object.js"></script>
+	<script src="script/eventListener.js"></script>
+	<script src="script/game.js"></script>
+	<!-- <script src="script/waterEffect.js"></script> -->
+	<!-- <script src="script/fish.js"></script> -->
 	<style>
 		body {
 			margin: 0px;
@@ -33,19 +34,44 @@
 </head>
 <body>
 	<header id="header" class="alt style2">
-		<a href="landing.html" class="logo"><strong>go to homepage</strong><span>   Follow the point lights</span></a>
+		<a href="landing.html" class="logo"><strong>Marshall Lee</strong></a>
 		<!-- <nav>
 			<a href="#menu">Menu</a>
 		</nav> -->
 	</header>
 	<!-- <nav id="menu">
 		<ul class="links">
-			<li><a href="#" onClick="javascript:window.open('landing.html')">Home</a></li>
-			<li><a href="#" onClick="javascript:window.open('AboutMe.html')">About Me</a></li>
-			<li><a href="#" onClick="javascript:window.open('Portfolio.html')">Portfolio</a></li>
-			<li><a href="#" onClick="javascript:window.open('contact.html')">Contact Me</a></li>
+			<li><a href="#" onClick="javascript:window.open('#landing', '_self')">Home</a></li>
+			<li><a href="#" onClick="javascript:window.open('#about', '_self')">About Me</a></li>
+			<li><a href="#" onClick="javascript:window.open('#portfolio', '_self')">Portfolio</a></li>
+			<li><a href="#" onClick="javascript:window.open('#contact', '_self')">Contact Me</a></li>
 		</ul>
 	</nav> -->
+	<div class="popup" id="aboutme">
+		<div class="popup-inner">
+			<embed type="text/html" src="AboutMe.html" style="width: 100%; height: 100%; display: inline-block">
+			<a class="popup__close" href="#">X</a>
+		</div>
+	</div>
+	<div class="popup" id="portfolio">
+		<div class="popup-inner">
+			<embed type="text/html" src="Portfolio.html" style="width: 100%; height: 100%; display: inline-block">
+			<a class="popup__close" href="#">X</a>
+		</div>
+	</div>
+	<div class="popup" id="contact">
+		<div class="popup-inner">
+			<embed type="text/html" src="contact.html" style="width: 100%; height: 100%; display: inline-block">
+			<a class="popup__close" href="#">X</a>
+		</div>
+	</div>
+	<div class="popup" id="landing">
+		<div class="popup-inner">
+			<embed type="text/html" src="landing.html" style="width: 100%; height: 100%; display: inline-block">
+			<a class="popup__close" href="#">X</a>
+		</div>
+	</div>
+
 	<script>
 		loadListener();
 	</script>

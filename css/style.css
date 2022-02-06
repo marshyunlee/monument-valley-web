@@ -329,10 +329,11 @@ html {
 body {
   margin: auto;
   padding: auto;
-  max-width: 1200px;
-  background: #43cbbb url("../asset/img/valley/sky.png") no-repeat;
+  max-width: 100%;
+  background: #2b3d42 url("../asset/img/valley/sky.png") no-repeat;
   background-position: 50% 0%;
-  background-attachment: fixed;
+  background-attachment: absolute;
+  background-size: auto;
 }
 
 article,
@@ -386,7 +387,7 @@ div.wrapper {
   margin: 0 auto;
   padding: 0.5em 0;
   width: 100%;
-  height: 30px;r
+  height: 30px;
   background-position: 50% top;
 }
 
@@ -566,27 +567,27 @@ hr {
 
 #valley-2 {
   background: url("../asset/img/valley/valley-2.png") no-repeat;
-  opacity: 0.9;
+  /* opacity: 0.9; */
 }
 
 #valley-3 {
   background: url("../asset/img/valley/valley-3.png") no-repeat;
-  opacity: 0.85;
+  /* opacity: 0.85; */
 }
 
 #valley-4 {
   background: url("../asset/img/valley/valley-4.png") no-repeat;
-  opacity: 0.8;
+  /* opacity: 0.8; */
 }
 
 #valley-5 {
   background: url("../asset/img/valley/valley-5.png") no-repeat;
-  opacity: 0.75;
+  /* opacity: 0.75; */
 }
 
 #valley-6 {
   background: url("../asset/img/valley/valley-6b.png") no-repeat;
-  opacity: 0.8;
+  /* opacity: 0.8; */
 }
 
 #valley-1,
