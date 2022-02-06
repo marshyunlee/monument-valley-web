@@ -21,7 +21,7 @@
 	 visibility: hidden;
 	 opacity: 0;
 	 overflow: hiden;
-	 transition: 0.2s ease-in-out;
+	 transition: 0.5s ease-in-out;
 }
  .popup-inner {
 	 position: relative;
@@ -34,7 +34,7 @@
 	 width: 80%;
 	 height: 70%;
 	 background-color: #fff;
-	 transition: 0.2s ease-in-out;
+	 transition: 0.5s ease-in-out;
 }
  .popup__photo {
 	 display: flex;
