@@ -21,12 +21,12 @@
 	 visibility: hidden;
 	 opacity: 0;
 	 overflow: hiden;
-	 transition: 0.64s ease-in-out;
+	 transition: 0.2s ease-in-out;
 }
  .popup-inner {
 	 position: relative;
-	 bottom: -100vw;
-	 right: -100vh;
+	 /* bottom: -100vw;
+	 right: -100vh; */
 	 display: flex;
 	 align-items: center;
 	 max-width: 100%;
@@ -34,7 +34,7 @@
 	 width: 80%;
 	 height: 70%;
 	 background-color: #fff;
-	 transition: 0.64s ease-in-out;
+	 transition: 0.2s ease-in-out;
 }
  .popup__photo {
 	 display: flex;
