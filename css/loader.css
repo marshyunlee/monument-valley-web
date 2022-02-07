@@ -55,7 +55,6 @@ body {
 	  0 0 100px rgba(255, 255, 255, 0.35);
 	transform: rotateZ(-15deg);
 	animation-duration: 0.8s;
-	transition-timing-function: ease-out;
 	animation-iteration-count: infinite;
 	animation-fill-mode: both;
 	animation-name: anim;

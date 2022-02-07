@@ -62,8 +62,11 @@ var loadListener = async () => {
 				then = Date.now();
 				startTime = then;
 				animate();
-			})
-		);
+			}))
+		.then(() => {
+			let loadingDiv = document.getElementById('loading');
+			loadingDiv.parentNode.removeChild(loadingDiv);
+		});
 	});
 
 	defaultMapGeometry = new THREE.Vector3(
