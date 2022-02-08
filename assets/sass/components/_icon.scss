@@ -33,17 +33,18 @@
 		&.alt {
 			&:before {
 				@include vendor('transition', 'background-color #{_duration(transition)} ease-in-out');
+				padding-left: 10px;
 			}
 
 			&:hover {
 				&:before {
-					background-color: _palette(accent1);
+					background-color: _palette(bg);
 				}
 			}
 
 			&:active {
 				&:before {
-					background-color: desaturate(darken(_palette(accent1), 15), 5);
+					background-color: desaturate(darken(_palette(bg), 15), 5);
 				}
 			}
 		}
