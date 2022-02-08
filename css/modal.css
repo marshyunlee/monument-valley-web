@@ -25,10 +25,11 @@
 }
  .popup-inner {
 	 position: relative;
-	 /* bottom: -100vw;
-	 right: -100vh; */
+	 bottom: -10vw;
+	 /* right: -100vh; */
 	 display: flex;
 	 align-items: center;
+	 justify-content: center;
 	 max-width: 100%;
 	 max-height: 100%;
 	 width: 90%;
