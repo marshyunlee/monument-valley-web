@@ -216,7 +216,7 @@ var applyMovement = async () => {
 		}
 		await openURL("#contact");
 	} else if ((currentPos.x === BONUS.x && currentPos.y === BONUS.y)) {
-		await openURL("#landing");
+		await openURL("landing.html");
 	} else if (!(currentPos.x === INTRO.x && currentPos.y === INTRO.y) &&
 				!(currentPos.x === PORTFOLIO.x && currentPos.y === PORTFOLIO.y) &&
 				!(currentPos.x === CONTACT.x && currentPos.y === CONTACT.y)) {
