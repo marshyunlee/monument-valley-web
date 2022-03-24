@@ -416,7 +416,7 @@ var onMouseDown = async (event) => {
 }
 
 var isMobile = () => {
-	const isMobile = ('ontouchstart' in document.documentElement || navigator.userAgent.match(/Mobi/));
+	const isMobile = ('ontouchstart' in document.documentElement || navigator.userAgent.match(/Mobi/) || navigator.userAgentData.mobile);
 	if (isMobile === true) {
 		return isMobile;
 	} else {
