@@ -332,7 +332,7 @@ body {
   max-width: 100%;
   background: #2b3d42 url("../asset/img/valley/sky.png") no-repeat;
   background-position: 50% 0%;
-  background-attachment: absolute;
+  background-attachment: fixed;
 }
 
 article,
