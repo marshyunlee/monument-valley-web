@@ -281,10 +281,10 @@ hr {
 
 #valley-1, #valley-2, #valley-3, #valley-4, #valley-5, #valley-6   {
 	position: absolute;
-	//margin-top: -120px;
-	//background-position: 0% 0%;
-	//background-size: cover;
-	background-size: 100% 100%;
+	margin-top: -120px;
+	background-position: 0% 0%;
+	background-size: cover;
+	// background-size: 100% 100%;
 	transition: transform 0.25s;
 }
 
