@@ -74,7 +74,7 @@ function checkIfTextFade() {
 	var opacity = $('#text-wrapper .text-inner').css('opacity');
   	var margin_top_max = -80;
   	var margin_top = margin_top_max * (1 - opacity);
-  	$('#text-wrapper .text-inner h1').css('margin-top', margin_top + "px");
+  	// $('#text-wrapper .text-inner h1').css('margin-top', margin_top + "px");
 }
 
 function addSettingsListeners() {
