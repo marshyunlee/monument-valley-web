@@ -17,7 +17,7 @@ $(function() {
 		initPageNoWebGL();
 	} else
 	{
-		var canvas = document.getElementById("canvas-test");
+		var canvas = document.getElementById("canvas");
     	var ctx = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
     	if (!ctx)
     	{
