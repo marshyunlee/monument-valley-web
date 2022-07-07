@@ -78,6 +78,7 @@
 	 right: 0;
 }
  .popup__close {
+	 border: none;
 	 position: absolute;
 	 right: -1.5rem;
 	 top: -1.5rem;
