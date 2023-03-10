@@ -11,24 +11,24 @@ $(function() {
 	resizeContainers();
 
 	// Check for WebGL
-	// if (!window.WebGLRenderingContext)
-	// {
-	// 	// the browser doesn't even know what WebGL is
-	// 	initPageNoWebGL();
-	// } else
-	// {
+	if (!window.WebGLRenderingContext)
+	{
+		// the browser doesn't even know what WebGL is
+		initPageNoWebGL();
+	} else
+	{
 		var canvas = document.getElementById("canvas");
     	var ctx = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-    	// if (!ctx)
-    	// {
-		// 	initPageWebGLProblem();
-		// }
-		// else 
-		// {
+    	if (!ctx)
+    	{
+			initPageWebGLProblem();
+		}
+		else 
+		{
 			initPage();
 			init3DText();
-		// }
-	// }
+		}
+	}
 
   	// Initialise scroller library
 	var s = skrollr.init({
