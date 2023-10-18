@@ -330,7 +330,7 @@ body {
   margin: 0 auto;
   padding: 0;
   max-width: 100%;
-  background: #2b3d42 url("../asset/img/valley/sky.png") no-repeat;
+  background: #2b3d42 url("../assets/img/valley/sky.png") no-repeat;
   background-position: 50% 0%;
   background-attachment: fixed;
 }
@@ -560,31 +560,31 @@ hr {
 }
 
 #valley-1 {
-  background: url("../asset/img/valley/valley-1f.png") no-repeat;
+  background: url("../assets/img/valley/valley-1f.png") no-repeat;
 }
 
 #valley-2 {
-  background: url("../asset/img/valley/valley-2.png") no-repeat;
+  background: url("../assets/img/valley/valley-2.png") no-repeat;
   /* opacity: 0.9; */
 }
 
 #valley-3 {
-  background: url("../asset/img/valley/valley-3.png") no-repeat;
+  background: url("../assets/img/valley/valley-3.png") no-repeat;
   /* opacity: 0.85; */
 }
 
 #valley-4 {
-  background: url("../asset/img/valley/valley-4.png") no-repeat;
+  background: url("../assets/img/valley/valley-4.png") no-repeat;
   /* opacity: 0.8; */
 }
 
 #valley-5 {
-  background: url("../asset/img/valley/valley-5.png") no-repeat;
+  background: url("../assets/img/valley/valley-5.png") no-repeat;
   /* opacity: 0.75; */
 }
 
 #valley-6 {
-  background: url("../asset/img/valley/valley-6b.png") no-repeat;
+  background: url("../assets/img/valley/valley-6b.png") no-repeat;
   /* opacity: 0.8; */
 }
 

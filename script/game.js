@@ -22,7 +22,7 @@ const aspectRatio = width/height;
 const fieldOfView = 25;
 const nearView = 1;
 const farView = 10000;
-const assetPath = '/asset/cell';
+const assetPath = '/objects/cell';
 const blockSize = 20;
 
 const TYPE_PLATFORM = 'platform';
